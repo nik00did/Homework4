@@ -45,7 +45,7 @@ AList.prototype.toString = function () {
 
 AList.prototype.push = function (element) {
 
-    if (element !== undefined) {
+    if (element !== undefined && element !== null) {
         this._array[this._length] = element;
         this._length++;
     }
