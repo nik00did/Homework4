@@ -13,10 +13,10 @@ LList.prototype.constructor = LList;
 
 LList.prototype.push = function (element) {
 
-    if (element !== undefined) {
+    if (element !== void 0) {
         const node = new Node(element);
 
-        if (this._root === null) {
+        if (!this._root) {
             this._root = node;
         } else {
             let tempNode = this._root;
@@ -35,20 +35,18 @@ LList.prototype.push = function (element) {
 };
 
 LList.prototype.pop = function () {
-    let temp;
 
-    if (this._root !== null){
-        temp = this._root;
-    } else {
-        return undefined;
+    if (!this._root){
+        return;
     }
 
+    let temp = this._root;
     let beforeElem = temp;
     let returnTemp;
 
     for (let i = 0; i < this._length; i++) {
 
-        if (temp.next !== null) {
+        if (!temp.next) {
             beforeElem = temp;
             temp = temp.next;
         } else {
@@ -64,45 +62,38 @@ LList.prototype.pop = function () {
 
 LList.prototype.shift = function () {
 
-    if (this._length === 0 ) {
-        return undefined;
-    } else {
-        let temp = this._root;
-
-        this._root = temp.next;
-        this._length--;
-
-        return temp.value;
+    if (!this._length) {
+        return;
     }
 
+    let temp = this._root;
+
+    this._root = temp.next;
+    this._length--;
+
+    return temp.value;
 };
 
 LList.prototype.unshift = function (element) {
     let node;
 
-    if (element) {
+    if (element || element === 0) {
         node = new Node(element);
         node.next = this._root;
         this._root = node;
         this._length++;
     }
 
-    return this._length;
+    return this.getSize();//this._length;
 };
 
 LList.prototype.init = function (...elements) {
-    let array = [];
 
-    if (elements) {
-
-        for (let i = 0; i < elements.length; i++) {
-            this.push(elements[i]);
-            array[i] = elements[i];
-        }
-
+    for (let i = 0; i < elements.length; i++) {
+        this.push(elements[i]);
     }
 
-    return array;
+    return this.getArray();
 };
 
 
@@ -111,9 +102,9 @@ LList.prototype.getArray = function () {
     let array = [];
     let temp = this._root;
 
-    for (let i = 0; i < this._length; i++) {
+    for (let i = 0; i < this.getSize(); i++) {
 
-        if(temp !== null) {
+        if(!temp) {
             array[i] = temp.value;
             temp = temp.next;
         }
@@ -128,18 +119,17 @@ LList.prototype.getSize = function () {
 };
 
 LList.prototype.toString = function () {
-    let string = '"[';
-    let temp;
 
-    if (this._root !== null) {
-        temp = this._root;
-    } else {
-        return '"[]"';
+    if (!this._root) {
+        return '[]';
     }
 
-    for (let i = 0; i < this._length; i++) {
+    let string = '[';
+    let temp = this._root;
 
-        if (temp.next !== null && i !== this._length - 1) {
+    for (let i = 0; i < this.getSize(); i++) {
+
+        if (temp.next !== null && i !== this.getSize() - 1) {
             string += temp.value;
             temp = temp.next;
             string += ', ';
@@ -147,7 +137,7 @@ LList.prototype.toString = function () {
 
     }
 
-    string += temp.value + ']"';
+    string += temp.value + ']';
 
     return string;
 };
@@ -244,14 +234,14 @@ LList.prototype.splice = function (startIndex, amountDelete, ...insertElement) {
 
     let afterSplicedTemp = temp;
 
-    while (curIndex < definedStartIndex + definedAmountDelete && afterSplicedTemp !== null) {
+    while (curIndex < definedStartIndex + definedAmountDelete && afterSplicedTemp) {
         curIndex++;
         afterSplicedTemp = afterSplicedTemp.next;
     }
 
     let tempAfterSplicedTemp = afterSplicedTemp;
 
-    while (tempAfterSplicedTemp !== null) {
+    while (tempAfterSplicedTemp) {
         tempAfterSplicedTemp = tempAfterSplicedTemp.next;
         tempSize++;
     }
@@ -261,7 +251,7 @@ LList.prototype.splice = function (startIndex, amountDelete, ...insertElement) {
     for (let i = 0; i < definedInsertElem.length; i++ ) {
         const node = new Node(definedInsertElem[i]);
 
-        if (tempRoot === null) {
+        if (!tempRoot) {
             tempRoot = node;
         } else {
             let tempNode = tempRoot;
@@ -303,19 +293,18 @@ LList.prototype.splice = function (startIndex, amountDelete, ...insertElement) {
 LList.prototype.get = function (index) {
     let temp;
 
-    if (this._length !== 0) {
-        temp = this._root;
-    } else {
-        return undefined;
+    if (!this._length) {
+        return;
     }
 
+    temp = this._root;
     let curIndex = 0;
 
     if (index > this._length || index < 0 ) {
-        return undefined;
+        return;
     } else {
 
-        while (curIndex < index && temp !== null) {
+        while (curIndex < index && !temp) {
             curIndex++;
             temp = temp.next;
         }
@@ -326,17 +315,16 @@ LList.prototype.get = function (index) {
 };
 
 LList.prototype.set = function (index, value) {
-    let temp;
 
-    if (this._length !== 0 && index < this._length && index >= 0) {
-        temp = this._root;
-    } else {
-        return ;
-    }
+    if (!(!this._length && index < this._length && index >= 0)) {
+        return;
+    } 
+
+    let temp = this._root;
 
     let curIndex = 0;
 
-    while (curIndex < index && temp.next !== null ) {
+    while (curIndex < index && !temp.next) {
         curIndex++;
         temp = temp.next;
     }
@@ -349,7 +337,7 @@ LList.prototype.sort = function (comparator = sortFunc0) {
 
     for (let i = 0; i < this._length; i++) {
 
-        for (let j = 0; j < this._length - 1; j++) {
+        for (let j = 0; j < this.getSize() - 1; j++) {
             let result = comparator(current.value, current.next.value);
             let temp = 0;
 
@@ -372,8 +360,3 @@ LList.prototype.sort = function (comparator = sortFunc0) {
 
     return this.getArray();
 };
-//
-// let llist = new LList();
-// console.log(llist.init(0, 1, 2));
-// console.log(llist.push(2));
-// console.log(llist.getArray());
