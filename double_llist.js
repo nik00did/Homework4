@@ -15,10 +15,10 @@ DoubleLList.prototype.constructor = DoubleLList;
 
 DoubleLList.prototype.push = function (element) {
 
-    if (element !== undefined) {
+    if (element !== void 0) {
         const node = new DoubleNode(element);
 
-        if (this._head === null) {
+        if (this._head) {
             this._head = this._tail =  node;
         } else {
             this._tail.next = node;
@@ -50,7 +50,7 @@ DoubleLList.prototype.init = function (...elements) {
 DoubleLList.prototype.pop = function () {
     let lastElement;
 
-    if (this._length !==0 ) {
+    if (this._length !== 0) {
         lastElement = this._tail.value;
         this._tail.next = null;
         this._tail = this._tail.previous;
@@ -76,7 +76,7 @@ DoubleLList.prototype.shift = function () {
 DoubleLList.prototype.unshift = function (element) {
     let node;
 
-    if (element ) {
+    if (element) {
         node = new DoubleNode(element);
         node.next = this._head;
         this._head = node;
@@ -97,7 +97,7 @@ DoubleLList.prototype.getArray = function () {
 
     for (let i = 0; i < this._length; i++) {
 
-        if(temp !== null) {
+        if(temp) {
             array[i] = temp.value;
             temp = temp.next;
         }
@@ -111,7 +111,7 @@ DoubleLList.prototype.toString = function () {
     let string = '"[';
     let temp;
 
-    if (this._root !== null) {
+    if (this._root) {
         temp = this._head;
     } else {
         return '"[]"';
@@ -223,14 +223,14 @@ DoubleLList.prototype.splice = function (startIndex, amountDelete, ...insertElem
 
     let afterSplicedTemp = temp;
 
-    while (curIndex < definedStartIndex + definedAmountDelete && afterSplicedTemp !== null) {
+    while (curIndex < definedStartIndex + definedAmountDelete && afterSplicedTemp) {
         curIndex++;
         afterSplicedTemp = afterSplicedTemp.next;
     }
 
     let tempAfterSplicedTemp = afterSplicedTemp;
 
-    while (tempAfterSplicedTemp !== null) {
+    while (tempAfterSplicedTemp) {
         tempAfterSplicedTemp = tempAfterSplicedTemp.next;
         tempSize++;
     }
@@ -240,7 +240,7 @@ DoubleLList.prototype.splice = function (startIndex, amountDelete, ...insertElem
     for (let i = 0; i < definedInsertElem.length; i++ ) {
         const node = new DoubleNode(definedInsertElem[i]);
 
-        if (tempRoot === null) {
+        if (!tempRoot) {
             tempRoot = node;
         } else {
             let tempNode = tempRoot;
@@ -285,16 +285,16 @@ DoubleLList.prototype.get = function (index) {
     if (this._length !== 0) {
         temp = this._head;
     } else {
-        return undefined;
+        return;
     }
 
     let curIndex = 0;
 
     if (index > this._length || index < 0 ) {
-        return undefined;
+        return;
     } else {
 
-        while (curIndex < index && temp !== null) {
+        while (curIndex < index && temp) {
             curIndex++;
             temp = temp.next;
         }
@@ -310,12 +310,12 @@ DoubleLList.prototype.set = function (index, value) {
     if (this._length !== 0 && index < this._length && index >= 0) {
         temp = this._head;
     } else {
-        return ;
+        return;
     }
 
     let curIndex = 0;
 
-    while (curIndex < index && temp.next !== null ) {
+    while (curIndex < index && temp.next) {
         curIndex++;
         temp = temp.next;
     }
@@ -351,8 +351,3 @@ DoubleLList.prototype.sort = function (comparator = sortFunc0) {
 
     return this.getArray();
 };
-
-let dllist = new DoubleLList();
-console.log(dllist.init(0, 1, 2, 3, 4));
-console.log(dllist.splice(2, 4, '*', '#'));
-console.log(dllist.getArray());
