@@ -45,7 +45,7 @@ AList.prototype.toString = function () {
 
 AList.prototype.push = function (element) {
 
-    if (element !== undefined && element !== null) {
+    if (element || element === 0) {
         this._array[this._length] = element;
         this._length++;
     }
@@ -82,7 +82,7 @@ AList.prototype.shift = function () {
 };
 
 AList.prototype.unshift = function (element) {
-    if (element !== undefined) {
+    if (element !== void 0) {
 
         for (let i = this._length; i > 0; i--) {
             this._array[i] = this._array[i - 1];
