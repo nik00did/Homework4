@@ -5,7 +5,7 @@ function Node (value) {
 
 function LList () {
     this._root = null;
-    this._length = 0;//List.apply(this);
+    this._length = 0;
 }
 
 LList.prototype = Object.create(List.prototype);
@@ -84,7 +84,7 @@ LList.prototype.unshift = function (element) {
         this._length++;
     }
 
-    return this.getSize();//this._length;
+    return this.getSize();
 };
 
 LList.prototype.init = function (...elements) {
@@ -129,7 +129,7 @@ LList.prototype.toString = function () {
 
     for (let i = 0; i < this.getSize(); i++) {
 
-        if (temp.next !== null && i !== this.getSize() - 1) {
+        if (temp.next && i !== this.getSize() - 1) {
             string += temp.value;
             temp = temp.next;
             string += ', ';

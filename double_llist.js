@@ -50,7 +50,7 @@ DoubleLList.prototype.init = function (...elements) {
 DoubleLList.prototype.pop = function () {
     let lastElement;
 
-    if (this._length !== 0) {
+    if (this._length) {
         lastElement = this._tail.value;
         this._tail.next = null;
         this._tail = this._tail.previous;
@@ -119,7 +119,7 @@ DoubleLList.prototype.toString = function () {
 
     for (let i = 0; i < this._length; i++) {
 
-        if (temp.next !== null && i !== this._length - 1) {
+        if (temp.next && i !== this._length - 1) {
             string += temp.value;
             temp = temp.next;
             string += ', ';
@@ -282,7 +282,7 @@ DoubleLList.prototype.splice = function (startIndex, amountDelete, ...insertElem
 DoubleLList.prototype.get = function (index) {
     let temp;
 
-    if (this._length !== 0) {
+    if (this._length) {
         temp = this._head;
     } else {
         return;
@@ -307,7 +307,7 @@ DoubleLList.prototype.get = function (index) {
 DoubleLList.prototype.set = function (index, value) {
     let temp;
 
-    if (this._length !== 0 && index < this._length && index >= 0) {
+    if (this._length && index < this._length && index >= 0) {
         temp = this._head;
     } else {
         return;
